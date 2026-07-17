@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>hellobajo.go — Scooter Rental Labuan Bajo</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet"/>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          teal:   '#0d9488',
+          tealD:  '#0f766e',
+          tealL:  '#ccfbf1',
+          ink:    '#111827',
+          muted:  '#6b7280',
+          sand:   '#f9f6f2',
+        },
+        fontFamily: {
+          display: ['Syne', 'sans-serif'],
+          body:    ['Inter', 'sans-serif'],
+        },
+      },
+    },
+  }
+</script>
+<style>
+  * { box-sizing: border-box; }
+  html,body { overflow-x: hidden; max-width: 100vw; font-family:'Inter',sans-serif; }
+  .font-display { font-family:'Syne',sans-serif; }
+
+  /* Navbar */
+  #navbar { backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); }
+
+  /* Lang dropdown */
+  #lang-menu { transform-origin:top right; }
+  #lang-menu.hidden { display:none; }
+
+  /* Accordion */
+  .faq-body { max-height:0; overflow:hidden; transition:max-height .35s ease; }
+  .faq-body.open { max-height:400px; }
+  .faq-chevron { transition:transform .3s ease; }
+  .faq-chevron.open { transform:rotate(180deg); }
+
+  /* Fleet card */
+  .fleet-card { transition:box-shadow .25s ease, transform .25s ease; }
+  .fleet-card:hover { box-shadow:0 24px 48px rgba(0,0,0,0.10); transform:translateY(-4px); }
+ 
+  /* Floating WA */
+  #wa-float { box-shadow:0 8px 24px rgba(37,211,102,0.4); }
+
+  /* Scroll reveal */
+  .reveal { opacity:0; transform:translateY(28px); transition:opacity .6s ease, transform .6s ease; }
+  .reveal.visible { opacity:1; transform:translateY(0); }
+
+  /* Carousel */
+  .carousel-track { display:flex; transition:transform .5s ease; will-change:transform; }
+  .carousel-slide { flex:0 0 100%; width:100%; }
+
+  /* Teal accent helpers */
+  .btn-teal { background:#0d9488; color:#fff; }
+  .btn-teal:hover { background:#0f766e; }
+  .text-teal { color:#0d9488; }
+  .border-teal { border-color:#0d9488; }
+  .ring-teal:focus { --tw-ring-color:#0d9488; }
+  .bg-teal-light { background:#ccfbf1; }
+  .bg-teal { background:#0d9488; }
+
+  /* Form inputs */
+  .form-input {
+    width:100%; border:1px solid #e5e7eb; border-radius:0.75rem;
+    padding:0.75rem 1rem; font-size:0.875rem; background:#fff;
+    outline:none; transition:border-color .2s, box-shadow .2s; appearance:none;
+  }
+  .form-input:focus { border-color:#0d9488; box-shadow:0 0 0 3px rgba(13,148,136,0.15); }
+  .form-select-wrap { position:relative; }
+  .form-select-wrap svg { position:absolute; right:0.75rem; top:50%; transform:translateY(-50%); pointer-events:none; color:#6b7280; }
+
+  /* Checkbox teal */
+  input[type=checkbox]:checked { accent-color:#0d9488; }
+
+  /* Logo img */
+  .logo-img { width:36px; height:36px; object-fit:contain; }
+
+  @media(max-width:640px){
+    .hero-btns { flex-direction:column; align-items:stretch; }
+    .hero-btns a { text-align:center; justify-content:center; }
+  }
+</style>
+</head>
+<body class="bg-white text-ink font-body antialiased">
+
+<!-- ═══════════════════════════════════
+     FLOATING WA BUTTON
+═══════════════════════════════════ -->
+<a id="wa-float"
+   href="https://wa.me/6208170788181?text=Hi%20hellobajo.go%2C%20I%27d%20like%20to%20rent%20a%20scooter"
+   target="_blank" rel="noopener"
+   class="fixed bottom-5 right-5 z-50 flex items-center gap-2 bg-[#25D366] text-white text-sm font-semibold px-4 py-3 rounded-full shadow-lg">
+  <svg class="w-5 h-5 fill-current flex-shrink-0" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.878-1.438A9.945 9.945 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"/></svg>
+  <span data-i18n="wa_float">Chat with us</span>
+</a>
+
+<!-- ═══════════════════════════════════
+     NAVBAR
+═══════════════════════════════════ -->
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-40 bg-white/85 border-b border-gray-100">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
+
+    <!-- Logo -->
+    <a href="#" class="flex items-center gap-2.5 flex-shrink-0">
+            <span class="font-display text-xl sm:text-2xl font-bold tracking-tight">
+        hello<span style="color:#0d9488">bajo</span><span class="text-gray-400 font-normal">.go</span>
+      </span>
+    </a>
+
+    <!-- Right -->
+    <div class="flex items-center gap-2 flex-shrink-0">
+
+      <!-- Language dropdown -->
+      <div class="relative">
+        <button id="lang-toggle"
+          class="flex items-center gap-1 text-xs sm:text-sm font-medium text-ink border border-gray-200 rounded-full px-2.5 sm:px-3 py-1.5 hover:border-gray-400 transition-colors whitespace-nowrap">
+          <svg class="w-3.5 h-3.5 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+          <span id="lang-current" class="text-xs font-semibold">EN</span>
+          <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div id="lang-menu" class="hidden absolute right-0 mt-2 w-36 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden py-1 z-50">
+          <button data-lang="en" class="lang-opt w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 flex items-center gap-2 font-medium"><span>🇬🇧</span> English</button>
+          <button data-lang="id" class="lang-opt w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 flex items-center gap-2 font-medium"><span>🇮🇩</span> Indonesia</button>
+          <button data-lang="zh" class="lang-opt w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 flex items-center gap-2 font-medium"><span>🇨🇳</span> 中文</button>
+          <button data-lang="ja" class="lang-opt w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 flex items-center gap-2 font-medium"><span>🇯🇵</span> 日本語</button>
+        </div>
+      </div>
+
+      <!-- WA CTA -->
+      <a href="https://wa.me/6208170788181?text=Hi%20hellobajo.go%2C%20I%27d%20like%20to%20rent%20a%20scooter"
+         target="_blank" rel="noopener"
+         class="btn-teal flex items-center gap-1.5 text-xs sm:text-sm font-semibold px-3 sm:px-4 py-2 rounded-full transition-colors whitespace-nowrap">
+        <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-current" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.878-1.438A9.945 9.945 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"/></svg>
+        <span data-i18n="nav_wa">WhatsApp</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+
+<!-- ═══════════════════════════════════
+     HERO
+═══════════════════════════════════ -->
+<section id="hero" class="relative min-h-screen flex items-center justify-center text-center pt-16">
+
+  <div class="absolute inset-0 w-full h-full -z-10">
+    <img src="images/padarislands.jpg" class="object-cover w-full h-full">
+  </div>
+
+  <div class="absolute inset-0 bg-gradient-to-b from-black/65 via-black/45 to-black/75"></div>
+  <div class="relative z-10 w-full max-w-3xl mx-auto px-5 py-20 sm:py-24">
+    <span class="inline-block text-xs font-semibold tracking-[0.18em] uppercase text-white bg-[#0d9488]/80 border border-[#0d9488] rounded-full px-4 py-1.5 mb-6" data-i18n="hero_badge">
+      Labuan Bajo · Est. 2022
+    </span>
+    <h1 class="font-display text-3xl sm:text-5xl md:text-6xl font-bold text-white leading-tight mb-5" data-i18n="hero_h1">
+      Premium Scooter Rental in Labuan Bajo
+    </h1>
+    <p class="text-base sm:text-lg text-white/85 mb-3 font-medium" data-i18n="hero_sub1">
+      Free delivery to Komodo airport, hotel, or anywhere in town.
+    </p>
+    <p class="text-sm sm:text-base text-white/60 mb-10 max-w-xl mx-auto" data-i18n="hero_sub2">
+      No deposit. Just pick a bike, chat us on WhatsApp, and we handle the rest.
+    </p>
+    <div class="hero-btns flex flex-col sm:flex-row gap-3 justify-center">
+      <a href="#fleet" class="inline-flex items-center justify-center gap-2 bg-white text-ink font-semibold text-sm px-6 py-3.5 rounded-full hover:bg-gray-100 transition-colors">
+        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 10l2-5h9l2 5M3 14h18M5 14v3a1 1 0 001 1h1a1 1 0 001-1v-1h8v1a1 1 0 001 1h1a1 1 0 001-1v-3"/><circle cx="7" cy="17" r="1.5"/><circle cx="17" cy="17" r="1.5"/></svg>
+        <span data-i18n="hero_btn1">Explore Fleet</span>
+      </a>
+      <a href="https://wa.me/6208170788181?text=Hi%20hellobajo.go%2C%20I%27d%20like%20to%20rent%20a%20scooter"
+         target="_blank" rel="noopener"
+         class="btn-teal inline-flex items-center justify-center gap-2 font-semibold text-sm px-6 py-3.5 rounded-full transition-colors">
+        <svg class="w-4 h-4 fill-current flex-shrink-0" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.878-1.438A9.945 9.945 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"/></svg>
+        <span data-i18n="hero_btn2">Book via WhatsApp</span>
+      </a>
+    </div>
+    <!-- Trust bar -->
+    <div class="mt-10 flex flex-wrap justify-center gap-4 sm:gap-6 text-white/65 text-xs sm:text-sm">
+      <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-[#0d9488]" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg><span data-i18n="trust1">No deposit</span></span>
+      <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-[#0d9488]" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg><span data-i18n="trust2">Helmet included</span></span>
+      <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-[#0d9488]" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg><span data-i18n="trust3">Free delivery</span></span>
+      <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-[#0d9488]" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg><span data-i18n="trust4">Reply in minutes</span></span>
+    </div>
+  </div>
+  <div class="absolute bottom-6 left-1/2 -translate-x-1/2 animate-bounce">
+    <svg class="w-6 h-6 text-white/50" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════
+     HOW IT WORKS
+═══════════════════════════════════ -->
+<section id="how" class="bg-white py-20 sm:py-24 px-4 sm:px-6">
+  <div class="max-w-5xl mx-auto">
+    <div class="text-center mb-14 reveal">
+      <p class="text-s font-semibold tracking-[0.2em] uppercase text-[#0d9488] mb-3" data-i18n="how_tag">How it works</p>
+      <h2 class="font-display text-2xl sm:text-4xl font-bold" data-i18n="how_h2">Four steps, zero stress</h2>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
+      <!-- Step 1 -->
+      <div class="reveal flex flex-col items-center text-center gap-3">
+        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-[#ccfbf1] flex items-center justify-center">
+          <svg class="w-6 h-6 sm:w-7 sm:h-7 text-[#0d9488]" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        </div>
+        <div>
+          <p class="text-xs font-bold tracking-widest uppercase text-[#0d9488] mb-1">01</p>
+          <h3 class="font-semibold text-sm sm:text-base mb-1" data-i18n="how1_title">Choose Scooter</h3>
+          <p class="text-xs sm:text-sm text-muted leading-relaxed" data-i18n="how1_body">Browse our fleet and pick the right ride for your trip.</p>
+        </div>
+      </div>
+      <!-- Step 2 -->
+      <div class="reveal flex flex-col items-center text-center gap-3" style="transition-delay:.1s">
+        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-[#ccfbf1] flex items-center justify-center">
+          <svg class="w-6 h-6 sm:w-7 sm:h-7 text-[#0d9488]" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        </div>
+        <div>
+          <p class="text-xs font-bold tracking-widest uppercase text-[#0d9488] mb-1">02</p>
+          <h3 class="font-semibold text-sm sm:text-base mb-1" data-i18n="how2_title">Chat on WhatsApp</h3>
+          <p class="text-xs sm:text-sm text-muted leading-relaxed" data-i18n="how2_body">Tell us your dates, hotel name, and preferred scooter. We reply soon.</p>
+        </div>
+      </div>
+      <!-- Step 3 -->
+      <div class="reveal flex flex-col items-center text-center gap-3" style="transition-delay:.2s">
+        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-[#ccfbf1] flex items-center justify-center">
+          <svg class="w-6 h-6 sm:w-7 sm:h-7 text-[#0d9488]" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+        </div>
+        <div>
+          <p class="text-xs font-bold tracking-widest uppercase text-[#0d9488] mb-1">03</p>
+          <h3 class="font-semibold text-sm sm:text-base mb-1" data-i18n="how3_title">Verify Identity</h3>
+          <p class="text-xs sm:text-sm text-muted leading-relaxed" data-i18n="how3_body">Share a photo of your ID/Passport, return flight ticket, and hotel booking confirmation. It is quick, simple, and keeps everyone safe.</p>
+        </div>
+      </div>
+      <!-- Step 4 -->
+      <div class="reveal flex flex-col items-center text-center gap-3" style="transition-delay:.3s">
+        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-[#ccfbf1] flex items-center justify-center">
+          <svg class="w-6 h-6 sm:w-7 sm:h-7 text-[#0d9488]" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path d="M5 10l2-5h9l2 5M3 14h18M5 14v3a1 1 0 001 1h1a1 1 0 001-1v-1h8v1a1 1 0 001 1h1a1 1 0 001-1v-3"/><circle cx="7" cy="17" r="1.5"/><circle cx="17" cy="17" r="1.5"/></svg>
+        </div>
+        <div>
+          <p class="text-xs font-bold tracking-widest uppercase text-[#0d9488] mb-1">04</p>
+          <h3 class="font-semibold text-sm sm:text-base mb-1" data-i18n="how4_title">Ride Away</h3>
+          <p class="text-xs sm:text-sm text-muted leading-relaxed" data-i18n="how4_body">We deliver to your door. Pay on arrival. Explore freely.</p>
+        </div>
+      </div>
+    </div>
+    <!-- Note box -->
+    <div class="mt-12 reveal flex gap-3 bg-[#f0fdf9] rounded-2xl px-5 py-4 border border-[#99f6e4]">
+      <svg class="w-5 h-5 text-[#0d9488] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+      <p class="text-xs sm:text-sm text-muted leading-relaxed" data-i18n="how_note">No commitment until you're ready. Messaging us is just a conversation — no payment upfront. Pay cash or transfer on delivery. <strong class="text-ink">No deposit required.</strong></p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════
+     FLEET
+═══════════════════════════════════ -->
+<section id="fleet" class="bg-[#f9f6f2] py-20 sm:py-24 px-4 sm:px-6">
+  <div class="max-w-5xl mx-auto">
+    <div class="text-center mb-14 reveal">
+      <p class="text-s font-semibold tracking-[0.2em] uppercase text-[#0d9488] mb-3" data-i18n="fleet_tag">Our Fleet</p>
+      <h2 class="font-display text-2xl sm:text-4xl font-bold mb-3" data-i18n="fleet_h2">Choose your ride</h2>
+      <p class="text-muted text-sm" data-i18n="fleet_note">Helmet and delivery included on all bikes. Photos are examples — exact color may vary.</p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+
+      <!-- Honda Beat -->
+      <div class="fleet-card bg-white rounded-3xl overflow-hidden border border-gray-100 reveal flex flex-col">
+        <div class="overflow-hidden bg-[#f0f4f8]">
+          <img src="images/beat.jpg">
+        </div>
+        <div class="p-5 sm:p-6 flex flex-col flex-1">
+          <div class="flex items-start justify-between mb-2 gap-2">
+            <h3 class="font-display font-bold text-base sm:text-lg leading-tight">Honda Beat <span class="text-xs font-normal text-muted">(or similar)</span></h3>
+            <span class="text-xs bg-amber-50 text-amber-700 border border-amber-200 rounded-full px-2.5 py-1 font-medium whitespace-nowrap flex-shrink-0" data-i18n="badge_min">Min 3 Days</span>
+          </div>
+          <p class="text-muted text-xs mb-3 leading-relaxed" data-i18n="beat_desc">Compact, fuel-efficient, and easy to park — perfect for exploring town and coastal roads.</p>
+          <div class="flex flex-wrap gap-1.5 mb-4">
+            <span class="text-xs bg-[#ccfbf1] text-[#0d9488] rounded-full px-2.5 py-1" data-i18n="tag_auto">Automatic</span>
+            <span class="text-xs bg-gray-100 text-ink rounded-full px-2.5 py-1">110cc</span>
+            <span class="text-xs bg-gray-100 text-ink rounded-full px-2.5 py-1" data-i18n="tag_efi">EFI</span>
+          </div>
+          <div class="flex items-end justify-between mt-auto pt-2">
+            <div>
+              <p class="text-xl sm:text-2xl font-bold text-ink">Rp 100k</p>
+              <p class="text-xs text-muted" data-i18n="per_day">per day</p>
+            </div>
+            <a href="https://wa.me/6208170788181?text=Hi%2C%20I%27d%20like%20to%20rent%20the%20Honda%20Beat%20or%20similar"
+               target="_blank" rel="noopener"
+               class="btn-teal text-sm font-semibold px-4 py-2.5 rounded-full transition-colors flex-shrink-0" data-i18n="book_btn">
+              Book This
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Honda Scoopy -->
+      <div class="fleet-card bg-white rounded-3xl overflow-hidden border border-gray-100 reveal flex flex-col" style="transition-delay:.1s">
+        <div class="overflow-hidden bg-[#fff0f0]">
+          <img src="images/scoopy.jpg">
+        </div>
+        <div class="p-5 sm:p-6 flex flex-col flex-1">
+          <div class="flex items-start justify-between mb-2 gap-2">
+            <h3 class="font-display font-bold text-base sm:text-lg leading-tight">Honda Scoopy <span class="text-xs font-normal text-muted">(or similar)</span></h3>
+            <span class="text-xs bg-amber-50 text-amber-700 border border-amber-200 rounded-full px-2.5 py-1 font-medium whitespace-nowrap flex-shrink-0" data-i18n="badge_min">Min 3 Days</span>
+          </div>
+          <p class="text-muted text-xs mb-3 leading-relaxed" data-i18n="scoopy_desc">Retro-chic style meets everyday practicality. Great for first-timers and casual riders.</p>
+          <div class="flex flex-wrap gap-1.5 mb-4">
+            <span class="text-xs bg-[#ccfbf1] text-[#0d9488] rounded-full px-2.5 py-1" data-i18n="tag_auto">Automatic</span>
+            <span class="text-xs bg-gray-100 text-ink rounded-full px-2.5 py-1">110cc</span>
+            <span class="text-xs bg-gray-100 text-ink rounded-full px-2.5 py-1" data-i18n="tag_keyless">Keyless</span>
+          </div>
+          <div class="flex items-end justify-between mt-auto pt-2">
+            <div>
+              <p class="text-xl sm:text-2xl font-bold text-ink">Rp 120k</p>
+              <p class="text-xs text-muted" data-i18n="per_day">per day</p>
+            </div>
+            <a href="https://wa.me/6208170788181?text=Hi%2C%20I%27d%20like%20to%20rent%20the%20Honda%20Scoopy%20or%20similar"
+               target="_blank" rel="noopener"
+               class="btn-teal text-sm font-semibold px-4 py-2.5 rounded-full transition-colors flex-shrink-0" data-i18n="book_btn">
+              Book This
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Yamaha NMAX -->
+      <div class="fleet-card bg-white rounded-3xl overflow-hidden border border-gray-100 reveal flex flex-col" style="transition-delay:.2s">
+        <div class="overflow-hidden bg-[#f0f4ff]">
+          <img src="images/nmax.jpg">
+        </div>
+        <div class="p-5 sm:p-6 flex flex-col flex-1">
+          <div class="flex items-start justify-between mb-2 gap-2">
+            <h3 class="font-display font-bold text-base sm:text-lg leading-tight">Yamaha NMAX <span class="text-xs font-normal text-muted">(or similar)</span></h3>
+            <span class="text-xs bg-[#ccfbf1] text-[#0d9488] border border-[#99f6e4] rounded-full px-2.5 py-1 font-medium whitespace-nowrap flex-shrink-0" data-i18n="badge_popular">Most Popular</span>
+          </div>
+          <p class="text-muted text-xs mb-3 leading-relaxed" data-i18n="nmax_desc">Big under-seat storage &amp; powerful engine. The most comfortable ride for exploring Labuan Bajo. Highway-ready for trips.</p>
+          <div class="flex flex-wrap gap-1.5 mb-4">
+            <span class="text-xs bg-[#ccfbf1] text-[#0d9488] rounded-full px-2.5 py-1" data-i18n="tag_auto">Automatic</span>
+            <span class="text-xs bg-gray-100 text-ink rounded-full px-2.5 py-1">155cc</span>
+            <span class="text-xs bg-gray-100 text-ink rounded-full px-2.5 py-1" data-i18n="tag_abs">ABS</span>
+          </div>
+          <div class="flex items-end justify-between mt-auto pt-2">
+            <div>
+              <p class="text-xl sm:text-2xl font-bold text-ink">Rp 175k</p>
+              <p class="text-xs text-muted" data-i18n="per_day">per day</p>
+            </div>
+            <a href="https://wa.me/6208170788181?text=Hi%2C%20I%27d%20like%20to%20rent%20the%20Yamaha%20NMAX%20or%20similar"
+               target="_blank" rel="noopener"
+               class="btn-teal text-sm font-semibold px-4 py-2.5 rounded-full transition-colors flex-shrink-0" data-i18n="book_btn">
+              Book This
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════
+     WHY CHOOSE US
+═══════════════════════════════════ -->
+<section id="why" class="bg-white py-20 sm:py-24 px-4 sm:px-6">
+  <div class="max-w-5xl mx-auto">
+    <div class="text-center mb-14 reveal">
+      <p class="text-s font-semibold tracking-[0.2em] uppercase text-[#0d9488] mb-3" data-i18n="why_tag">Why us</p>
+      <h2 class="font-display text-2xl sm:text-4xl font-bold" data-i18n="why_h2">Built for travellers, not tourists</h2>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+
+      <div class="reveal flex gap-4 p-5 sm:p-6 rounded-2xl bg-[#f9f6f2] border border-gray-100">
+        <div class="flex-shrink-0 w-10 h-10 rounded-xl bg-[#ccfbf1] flex items-center justify-center"><svg class="w-5 h-5 text-[#0d9488]" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M8 12h8M8 8h8M8 16h5M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z"/></svg></div>
+        <div><h3 class="font-semibold text-sm mb-1" data-i18n="why1_h">Seamless Booking</h3><p class="text-xs text-muted leading-relaxed" data-i18n="why1_b">WhatsApp only. No app, no account, no form. Just a quick chat and you're confirmed.</p></div>
+      </div>
+
+      <div class="reveal flex gap-4 p-5 sm:p-6 rounded-2xl bg-[#f9f6f2] border border-gray-100" style="transition-delay:.07s">
+        <div class="flex-shrink-0 w-10 h-10 rounded-xl bg-[#ccfbf1] flex items-center justify-center"><svg class="w-5 h-5 text-[#0d9488]" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></div>
+        <div><h3 class="font-semibold text-sm mb-1" data-i18n="why2_h">Well-Maintained</h3><p class="text-xs text-muted leading-relaxed" data-i18n="why2_b">Every bike is checked before each rental. Tyres, brakes, lights — all in top shape.</p></div>
+      </div>
+
+      <div class="reveal flex gap-4 p-5 sm:p-6 rounded-2xl bg-[#f9f6f2] border border-gray-100" style="transition-delay:.14s">
+        <div class="flex-shrink-0 w-10 h-10 rounded-xl bg-[#ccfbf1] flex items-center justify-center"><svg class="w-5 h-5 text-[#0d9488]" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3" stroke-linecap="round"/></svg></div>
+        <div><h3 class="font-semibold text-sm mb-1" data-i18n="why3_h">No Security Deposit</h3><p class="text-xs text-muted leading-relaxed" data-i18n="why3_b">Zero upfront deposit. Pay only the daily rate when we deliver — cash or transfer.</p></div>
+      </div>
+
+      <div class="reveal flex gap-4 p-5 sm:p-6 rounded-2xl bg-[#f9f6f2] border border-gray-100" style="transition-delay:.21s">
+        <div class="flex-shrink-0 w-10 h-10 rounded-xl bg-[#ccfbf1] flex items-center justify-center"><svg class="w-5 h-5 text-[#0d9488]" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 12h18M3 12l4-4M3 12l4 4"/></svg></div>
+        <div><h3 class="font-semibold text-sm mb-1" data-i18n="why4_h">Free Town Delivery</h3><p class="text-xs text-muted leading-relaxed" data-i18n="why4_b">We cover the airport, Katamaran, Marriott, La Prima, and most spots in Labuan Bajo.</p></div>
+      </div>
+
+      <div class="reveal flex gap-4 p-5 sm:p-6 rounded-2xl bg-[#f9f6f2] border border-gray-100" style="transition-delay:.28s">
+        <div class="flex-shrink-0 w-10 h-10 rounded-xl bg-[#ccfbf1] flex items-center justify-center"><svg class="w-5 h-5 text-[#0d9488]" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg></div>
+        <div><h3 class="font-semibold text-sm mb-1" data-i18n="why5_h">Premium Gear</h3><p class="text-xs text-muted leading-relaxed" data-i18n="why5_b">Full-face helmet included free. Phone mount and rain poncho available on request.</p></div>
+      </div>
+
+      <div class="reveal flex gap-4 p-5 sm:p-6 rounded-2xl bg-[#f9f6f2] border border-gray-100" style="transition-delay:.35s">
+        <div class="flex-shrink-0 w-10 h-10 rounded-xl bg-[#ccfbf1] flex items-center justify-center"><svg class="w-5 h-5 text-[#0d9488]" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg></div>
+        <div><h3 class="font-semibold text-sm mb-1" data-i18n="why6_h">Honest Support</h3><p class="text-xs text-muted leading-relaxed" data-i18n="why6_b">Real locals who know every road. If something goes wrong, we sort it out immediately.</p></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════
+     BOOK A SCOOTER (Form)
+═══════════════════════════════════ -->
+<section id="book" class="bg-[#f9f6f2] py-20 sm:py-24 px-4 sm:px-6">
+  <div class="max-w-2xl mx-auto reveal">
+    <div class="text-center mb-10">
+      <p class="text-s font-semibold tracking-[0.2em] uppercase text-[#0d9488] mb-3" data-i18n="book_tag">Reserve Now</p>
+      <h2 class="font-display text-2xl sm:text-4xl font-bold mb-3" data-i18n="book_h2">Book a Scooter</h2>
+      <p class="text-sm text-muted" data-i18n="book_sub">Fill in the details below and we'll open WhatsApp with your message ready.</p>
+    </div>
+
+    <div class="bg-white rounded-3xl border border-gray-100 p-6 sm:p-8 shadow-sm">
+      <div class="space-y-5">
+
+        <!-- Bike selector -->
+        <div>
+          <label class="block text-xs font-semibold uppercase tracking-wider text-muted mb-2" data-i18n="form_bike">Bike</label>
+          <div class="form-select-wrap">
+            <select id="f-bike" class="form-input pr-10">
+  <option value="" data-i18n-opt="form_bike_ph" data-price="0" data-overtime="0">Select a bike</option>
+  <!-- Overtime Beat: 10rb/jam -->
+  <option value="Honda Beat (or similar) – Rp 100k/day" data-price="100000" data-overtime="10000">Honda Beat (or similar) – Rp 100k/day</option>
+  <!-- Overtime Scoopy: 15rb/jam -->
+  <option value="Honda Scoopy (or similar) – Rp 120k/day" data-price="120000" data-overtime="15000">Honda Scoopy (or similar) – Rp 120k/day</option>
+  <!-- Overtime NMAX: 20rb/jam -->
+  <option value="Yamaha NMAX (or similar) – Rp 175k/day" data-price="175000" data-overtime="20000">Yamaha NMAX (or similar) – Rp 175k/day</option>
+</select>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+        </div>
+
+        <!-- Pickup Date + Time -->
+        <div>
+          <label class="block text-xs font-semibold uppercase tracking-wider text-muted mb-2" data-i18n="form_pickup">Pick-up Date &amp; Time</label>
+          <div class="grid grid-cols-2 gap-3">
+            <input id="f-pickup" type="date" class="form-input"/>
+            <div class="form-select-wrap">
+              <select id="f-pickup-time" class="form-input pr-10">
+                <option>8:00 AM</option><option>9:00 AM</option><option>10:00 AM</option>
+                <option>11:00 AM</option><option>12:00 PM</option><option>1:00 PM</option>
+                <option>2:00 PM</option><option>3:00 PM</option><option>4:00 PM</option>
+                <option>5:00 PM</option><option>6:00 PM</option>
+              </select>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Return Date + Time -->
+        <div>
+          <label class="block text-xs font-semibold uppercase tracking-wider text-muted mb-2" data-i18n="form_return">Drop-off Date &amp; Time</label>
+          <div class="grid grid-cols-2 gap-3">
+            <input id="f-return" type="date" class="form-input"/>
+            <div class="form-select-wrap">
+              <select id="f-return-time" class="form-input pr-10">
+                <option>8:00 AM</option><option>9:00 AM</option><option>10:00 AM</option>
+                <option>11:00 AM</option><option>12:00 PM</option><option>1:00 PM</option>
+                <option>2:00 PM</option><option>3:00 PM</option><option>4:00 PM</option>
+                <option>5:00 PM</option><option>6:00 PM</option>
+              </select>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Area -->
+        <div>
+          <label class="block text-xs font-semibold uppercase tracking-wider text-muted mb-2" data-i18n="form_area">Hotel / Delivery Area</label>
+          <div class="form-select-wrap">
+            <select id="f-area" class="form-input pr-10">
+              <option value="" data-i18n-opt="form_area_ph">Select area / hotel</option>
+              <option value="Komodo Airport (LBJ)">Komodo Airport (LBJ)</option>
+              <option value="Katamaran Hotel &amp; Resort">Katamaran Hotel &amp; Resort</option>
+              <option value="Marriott Labuan Bajo">Marriott Labuan Bajo</option>
+              <option value="La Prima Hotel">La Prima Hotel</option>
+              <option value="Sudamala Resort">Sudamala Resort</option>
+              <option value="Bintang Flores Hotel">Bintang Flores Hotel</option>
+              <option value="Ayana Komodo Resort">Ayana Komodo Resort</option>
+              <option value="Town Centre Hotel">Town Centre Hotel</option>
+              <option value="Other Area (Extra Fee May Apply)">Other Area (Extra Fee May Apply)</option>
+            </select>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+        </div>
+
+        <!-- Age confirmation checkbox -->
+        <div class="flex items-center gap-3 bg-[#f0fdf9] rounded-xl px-4 py-3 border border-[#99f6e4]">
+          <input type="checkbox" id="age-confirm" class="w-4 h-4 rounded cursor-pointer flex-shrink-0" style="accent-color:#0d9488"/>
+          <label for="age-confirm" class="text-xs sm:text-sm text-muted cursor-pointer" data-i18n="age_label">Rider is aged between 30 – 65 years old</label>
+        </div>
+
+        <!-- Kotak Preview Estimasi Harga -->
+        <div id="estimate-container" class="hidden bg-[#e0f2fe] text-[#0369a1] px-4 py-3 rounded-xl border border-[#bae6fd] text-sm text-center font-medium mb-4 transition-all duration-300">
+          Estimated rental cost: <span id="estimate-price" class="font-bold">Rp 0</span> for <span id="estimate-days" class="font-bold">0</span> days.
+        </div>
+
+        <!-- Submit -->
+        <button id="form-submit"
+          class="btn-teal w-full font-semibold text-sm py-4 rounded-xl flex items-center justify-center gap-2 transition-colors">
+          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.878-1.438A9.945 9.945 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"/></svg>
+          <span data-i18n="form_submit">Send on WhatsApp</span>
+        </button>
+        <p class="text-center text-xs text-muted" data-i18n="form_note">Renting by WhatsApp is normal here. Message us and we handle the rest.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================== -->
+<!-- SCRIPT FORMULA HITUNG (Overtime Dinamis) -->
+<!-- ========================================== -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const bikeSelect = document.getElementById('f-bike');
+    const pickupInput = document.getElementById('f-pickup');
+    const pickupTimeInput = document.getElementById('f-pickup-time');
+    const returnInput = document.getElementById('f-return');
+    const returnTimeInput = document.getElementById('f-return-time');
+    const estimateContainer = document.getElementById('estimate-container');
+
+    // Mengubah format "10:00 AM" jadi angka jam
+    function parseTime(timeStr) {
+      let parts = timeStr.split(' ');
+      let time = parts[0].split(':');
+      let h = parseInt(time[0]);
+      let ampm = parts[1];
+      if (ampm === 'PM' && h !== 12) h += 12;
+      if (ampm === 'AM' && h === 12) h = 0;
+      return h;
+    }
+
+    // Mengubah angka jadi format Rupiah yang rapi
+    const formatRupiah = (number) => {
+      return new Intl.NumberFormat('id-ID', { 
+        style: 'currency', 
+        currency: 'IDR', 
+        minimumFractionDigits: 0 
+      }).format(number);
+    };
+
+    function calculateEstimate() {
+      const selectedOption = bikeSelect.options[bikeSelect.selectedIndex];
+      const pricePerDay = parseInt(selectedOption.getAttribute('data-price')) || 0;
+      
+      // MENGAMBIL TARIF OVERTIME DARI DATA-OVERTIME MOTOR YANG DIPILIH
+      const overtimeRatePerHour = parseInt(selectedOption.getAttribute('data-overtime')) || 0;
+      
+      if (pricePerDay > 0 && pickupInput.value && returnInput.value) {
+        
+        const pDate = new Date(pickupInput.value);
+        pDate.setHours(parseTime(pickupTimeInput.value), 0, 0, 0);
+
+        const rDate = new Date(returnInput.value);
+        rDate.setHours(parseTime(returnTimeInput.value), 0, 0, 0);
+
+        const timeDiff = rDate.getTime() - pDate.getTime();
+        const hoursDiff = timeDiff / (1000 * 3600);
+
+        if (hoursDiff > 0) {
+          
+          let days = Math.floor(hoursDiff / 24);
+          let extraHours = Math.floor(hoursDiff % 24);
+
+          if (days === 0) {
+              days = 1;
+              extraHours = 0;
+          }
+
+          const baseCost = days * pricePerDay;
+
+          if (extraHours > 0) {
+              const overtimeCost = extraHours * overtimeRatePerHour;
+              const totalCost = baseCost + overtimeCost;
+              
+              estimateContainer.innerHTML = `
+                <div class="flex flex-col gap-1 text-sm text-left w-full max-w-sm mx-auto">
+                  <div class="flex justify-between items-center">
+                    <span>Base Rental (${days} days)</span>
+                    <span class="font-medium">${formatRupiah(baseCost)}</span>
+                  </div>
+                  <div class="flex justify-between items-center text-[#0ea5e9]">
+                    <span>Overtime (${extraHours} hrs @ ${formatRupiah(overtimeRatePerHour)})</span>
+                    <span class="font-medium">+ ${formatRupiah(overtimeCost)}</span>
+                  </div>
+                  <div class="flex justify-between items-center pt-2 mt-2 border-t border-[#bae6fd] text-base font-bold text-[#0284c7]">
+                    <span>Total Estimate</span>
+                    <span>${formatRupiah(totalCost)}</span>
+                  </div>
+                </div>
+              `;
+          } else {
+              estimateContainer.innerHTML = `Estimated rental cost: <b>${formatRupiah(baseCost)}</b> for <b>${days} days</b>.`;
+          }
+          
+          estimateContainer.classList.remove('hidden');
+        } else {
+          estimateContainer.classList.add('hidden');
+        }
+      } else {
+        estimateContainer.classList.add('hidden');
+      }
+    }
+
+    bikeSelect.addEventListener('change', calculateEstimate);
+    pickupInput.addEventListener('change', calculateEstimate);
+    pickupTimeInput.addEventListener('change', calculateEstimate);
+    returnInput.addEventListener('change', calculateEstimate);
+    returnTimeInput.addEventListener('change', calculateEstimate);
+  });
+</script>
+
+<!-- ═══════════════════════════════════
+     CUSTOMER MOMENTS CAROUSEL
+═══════════════════════════════════ -->
+<section id="moments" class="bg-white py-20 sm:py-24 px-4 sm:px-6">
+  <div class="max-w-5xl mx-auto">
+    <div class="text-center mb-10 reveal">
+      <p class="text-s font-semibold tracking-[0.2em] uppercase text-[#0d9488] mb-3" data-i18n="carousel_tag">Customer Moments</p>
+      <h2 class="font-display text-2xl sm:text-4xl font-bold" data-i18n="carousel_h2">Stories from the road</h2>
+    </div>
+
+    <div class="reveal relative overflow-hidden rounded-3xl shadow-lg" id="carousel-wrapper">
+      <!-- Track -->
+      <div class="carousel-track" id="carousel-track">
+        <div class="carousel-slide">
+          <div class="w-full h-56 sm:h-80 flex items-center justify-center rounded-3xl overflow-hidden" style="background-image: url('images/privatecharter.jpg'); background-size: cover; background-position: center;">
+            <div class="text-center text-white px-8">
+            </div>
+          </div>
+        </div>
+        <div class="carousel-slide">
+          <div class="w-full h-56 sm:h-80 flex items-center justify-center rounded-3xl overflow-hidden" style="background:linear-gradient(135deg,#0891b2,#1e3a5f)">
+            <div class="text-center text-white px-8">
+              <div class="text-5xl mb-4">🏝️</div>
+              <p class="font-display text-xl sm:text-2xl font-bold mb-2" data-i18n="slide2_title">Pink Beach Adventure</p>
+              <p class="text-sm text-white/70" data-i18n="slide2_sub">Discover the hidden gems of Flores</p>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-slide">
+          <div class="w-full h-56 sm:h-80 flex items-center justify-center rounded-3xl overflow-hidden" style="background:linear-gradient(135deg,#0f766e,#134e4a)">
+            <div class="text-center text-white px-8">
+              <div class="text-5xl mb-4">🦎</div>
+              <p class="font-display text-xl sm:text-2xl font-bold mb-2" data-i18n="slide3_title">Komodo Explorer</p>
+              <p class="text-sm text-white/70" data-i18n="slide3_sub">Ride to the land of the ancient dragons</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Prev / Next -->
+      <button id="carousel-prev" class="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-md transition-all z-10">
+        <svg class="w-4 h-4 text-ink" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
+      </button>
+      <button id="carousel-next" class="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-md transition-all z-10">
+        <svg class="w-4 h-4 text-ink" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+      </button>
+
+      <!-- Dots -->
+      <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+        <button class="carousel-dot w-2 h-2 rounded-full bg-white/60 transition-all" data-idx="0"></button>
+        <button class="carousel-dot w-2 h-2 rounded-full bg-white/60 transition-all" data-idx="1"></button>
+        <button class="carousel-dot w-2 h-2 rounded-full bg-white/60 transition-all" data-idx="2"></button>
+      </div>
+    </div>
+    <p class="hidden text-center text-xs text-muted mt-4" data-i18n="carousel_note">📸 Upload your adventure photos and we'll feature them here!</p>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════
+     FAQ
+═══════════════════════════════════ -->
+<section id="faq" class="bg-[#f9f6f2] py-20 sm:py-24 px-4 sm:px-6">
+  <div class="max-w-2xl mx-auto">
+    <div class="text-center mb-12 reveal">
+      <p class="text-s font-semibold tracking-[0.2em] uppercase text-[#0d9488] mb-3" data-i18n="faq_tag">FAQ</p>
+      <h2 class="font-display text-2xl sm:text-4xl font-bold" data-i18n="faq_h2">Common questions</h2>
+    </div>
+
+    <div class="space-y-2.5 reveal">
+
+      <div class="faq-item border border-gray-100 rounded-2xl overflow-hidden bg-white">
+        <button class="faq-toggle w-full flex items-center justify-between gap-4 px-5 py-4 text-left">
+          <span class="font-semibold text-sm" data-i18n="faq0_q">What documents do I need to rent?</span>
+          <svg class="faq-chevron w-5 h-5 text-muted flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="faq-body">
+          <p class="px-5 pb-4 text-sm text-muted leading-relaxed" data-i18n="faq0_a">Simply provide your ID card or Passport, a round-trip flight ticket, and your hotel booking confirmation.</p>
+        </div>
+      </div>
+
+      <div class="faq-item border border-gray-100 rounded-2xl overflow-hidden bg-white">
+        <button class="faq-toggle w-full flex items-center justify-between gap-4 px-5 py-4 text-left">
+          <span class="font-semibold text-sm" data-i18n="faq1_q">Where do you deliver?</span>
+          <svg class="faq-chevron w-5 h-5 text-muted flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="faq-body">
+          <p class="px-5 pb-4 text-sm text-muted leading-relaxed" data-i18n="faq1_a">We deliver across Labuan Bajo town, the airport (LBJ), Katamaran, Marriott, La Prima, Sudamala, Bintang Flores, and Ayana Komodo Resort. Heading somewhere else? Just ask — we'll figure it out. Please note that some locations outside town may incur a small extra delivery fee.</p>
+        </div>
+      </div>
+
+      <div class="faq-item border border-gray-100 rounded-2xl overflow-hidden bg-white">
+        <button class="faq-toggle w-full flex items-center justify-between gap-4 px-5 py-4 text-left">
+          <span class="font-semibold text-sm" data-i18n="faq2_q">Is there a security deposit?</span>
+          <svg class="faq-chevron w-5 h-5 text-muted flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="faq-body">
+          <p class="px-5 pb-4 text-sm text-muted leading-relaxed" data-i18n="faq2_a">No deposit at all. You pay only the daily rate when we deliver the bike — by cash or bank transfer. No cards, no upfront charges, no surprises.</p>
+        </div>
+      </div>
+
+      <div class="faq-item border border-gray-100 rounded-2xl overflow-hidden bg-white">
+        <button class="faq-toggle w-full flex items-center justify-between gap-4 px-5 py-4 text-left">
+          <span class="font-semibold text-sm" data-i18n="faq3_q">What if I get a flat tyre?</span>
+          <svg class="faq-chevron w-5 h-5 text-muted flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="faq-body">
+          <p class="px-5 pb-4 text-sm text-muted leading-relaxed" data-i18n="faq3_a">Message us immediately on WhatsApp. We'll guide you to the nearest repair shop (very affordable here) or come out to you if needed. We're locals — we know every mechanic in town.</p>
+        </div>
+      </div>
+
+      <div class="faq-item border border-gray-100 rounded-2xl overflow-hidden bg-white">
+        <button class="faq-toggle w-full flex items-center justify-between gap-4 px-5 py-4 text-left">
+          <span class="font-semibold text-sm" data-i18n="faq4_q">Do I need a driving licence?</span>
+          <svg class="faq-chevron w-5 h-5 text-muted flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="faq-body">
+          <p class="px-5 pb-4 text-sm text-muted leading-relaxed" data-i18n="faq4_a">We don't require one from you to rent. However, Indonesian law requires a valid licence to ride on public roads. An international driving permit or your home-country licence is generally accepted.</p>
+        </div>
+      </div>
+
+      <div class="faq-item border border-gray-100 rounded-2xl overflow-hidden bg-white">
+        <button class="faq-toggle w-full flex items-center justify-between gap-4 px-5 py-4 text-left">
+          <span class="font-semibold text-sm" data-i18n="faq5_q">How do I return the bike?</span>
+          <svg class="faq-chevron w-5 h-5 text-muted flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="faq-body">
+          <p class="px-5 pb-4 text-sm text-muted leading-relaxed" data-i18n="faq5_a">Just let us know your return date and where you're staying. We'll pick it up from your hotel or agree on a simple drop-off point nearby. Easy.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════
+     FOOTER
+═══════════════════════════════════ -->
+<footer class="bg-[#111827] text-white py-12 sm:py-14 px-4 sm:px-6">
+  <div class="max-w-5xl mx-auto">
+    <div class="flex flex-col md:flex-row items-center md:items-start justify-between gap-8 mb-10">
+      <div class="text-center md:text-left">
+        <div class="flex items-center justify-center md:justify-start gap-2.5 mb-3">
+          <!-- Hapus img dan teks "hello bajo icon" di sini -->
+          <p class="font-display text-xl sm:text-2xl font-bold">hello<span style="color:#0d9488">bajo</span><span class="text-white/40 font-normal">.go</span></p>
+        </div>
+        <p class="text-white/50 text-sm max-w-xs" data-i18n="footer_desc">Premium scooter rental in Labuan Bajo. Free delivery. No deposit. Locals who care.</p>
+      </div>
+      <div class="flex flex-col items-center md:items-end gap-3">
+        <a href="https://wa.me/6208170788181" target="_blank" rel="noopener"
+           class="flex items-center gap-2 bg-[#25D366] hover:bg-[#1eb558] text-white font-semibold text-sm px-5 py-3 rounded-full transition-colors">
+          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.878-1.438A9.945 9.945 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"/></svg>
+          +62 817-0788-181
+        </a>
+        <p class="text-white/30 text-s">hellobajo.go@gmail.com</p>
+      </div>
+    </div>
+    <!-- Payment note -->
+    <div class="border-t border-white/10 pt-6 mb-4">
+      <p class="text-center text-s text-white/40 flex items-center justify-center gap-2 flex-wrap">
+        <svg class="w-4 h-4 text-[#0d9488]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+        <span data-i18n="footer_payment">Verified Local Bank Transfer Accepted via Wise / Revolut</span>
+      </p>
+    </div>
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-3 text-white/30 text-xs">
+      <span>© 2026 hellobajo.go — <span data-i18n="footer_copy">All rights reserved.</span></span>
+      <span data-i18n="footer_made">Made with ♥ in Labuan Bajo</span>
+    </div>
+  </div>
+</footer>
+
+
+<!-- ═══════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════ -->
+<script>
+/* ──────────────────────────────────────
+   TRANSLATIONS — 4 LANGUAGES
+────────────────────────────────────── */
+const i18n = {
+
+  en: {
+    nav_wa:"WhatsApp", wa_float:"Chat with us",
+    hero_badge:"Labuan Bajo · Est. 2022",
+    hero_h1:"Premium Scooter Rental in Labuan Bajo",
+    hero_sub1:"Free delivery to Komodo airport, hotel, or anywhere in town.",
+    hero_sub2:"No deposit. Just pick a bike, chat us on WhatsApp, and we handle the rest.",
+    hero_btn1:"Explore Fleet", hero_btn2:"Book via WhatsApp",
+    trust1:"No deposit", trust2:"Helmet included", trust3:"Free delivery", trust4:"Reply in minutes",
+    how_tag:"How it works", how_h2:"Four steps, zero stress",
+    how1_title:"Choose Scooter", how1_body:"Browse our fleet and pick the right ride for your trip.",
+    how2_title:"Chat on WhatsApp", how2_body:"Tell us your dates, hotel name, and preferred scooter. We reply soon.",
+    how3_title:"Verify Identity", how3_body:"Share a photo of your ID/Passport, return flight ticket, and hotel booking confirmation. It is quick, simple, and keeps everyone safe.",
+    how4_title:"Ride Away", how4_body:"We deliver to your door. Pay on arrival. Explore freely.",
+    how_note:"No commitment until you're ready. Messaging us is just a conversation — no payment upfront. Pay cash or transfer on delivery. <strong class='text-ink'>No deposit required.</strong>",
+    fleet_tag:"Our Fleet", fleet_h2:"Choose your ride",
+    fleet_note:"Helmet and delivery included on all bikes. Photos are examples — exact color may vary.",
+    badge_min:"Min 3 Days", badge_popular:"Most Popular",
+    beat_desc:"Compact, fuel-efficient, and easy to park — perfect for exploring town and coastal roads.",
+    scoopy_desc:"Retro-chic style meets everyday practicality. Great for first-timers and casual riders.",
+    nmax_desc:"Big under-seat storage &amp; powerful engine. The most comfortable ride for exploring Labuan Bajo. Highway-ready for trips.",
+    tag_auto:"Automatic", tag_efi:"EFI", tag_keyless:"Keyless", tag_abs:"ABS",
+    per_day:"per day", book_btn:"Book This",
+    why_tag:"Why us", why_h2:"Built for travellers, not tourists",
+    why1_h:"Seamless Booking", why1_b:"WhatsApp only. No app, no account, no form. Just a quick chat and you're confirmed.",
+    why2_h:"Well-Maintained", why2_b:"Every bike is checked before each rental. Tyres, brakes, lights — all in top shape.",
+    why3_h:"No Security Deposit", why3_b:"Zero upfront deposit. Pay only the daily rate when we deliver — cash or transfer.",
+    why4_h:"Free Town Delivery", why4_b:"We cover the airport, Katamaran, Marriott, La Prima, and most spots in Labuan Bajo.",
+    why5_h:"Premium Gear", why5_b:"Full-face helmet included free. Phone mount and rain poncho available on request.",
+    why6_h:"Honest Support", why6_b:"Real locals who know every road. If something goes wrong, we sort it out immediately.",
+    book_tag:"Reserve Now", book_h2:"Book a Scooter",
+    book_sub:"Fill in the details below and we'll open WhatsApp with your message ready.",
+    form_bike:"Bike", form_bike_ph:"Select a bike",
+    form_pickup:"Pick-up Date &amp; Time", form_return:"Drop-off Date &amp; Time",
+    form_area:"Hotel / Delivery Area", form_area_ph:"Select area / hotel",
+    age_label:"Rider is aged between 30 – 65 years old",
+    form_submit:"Send on WhatsApp",
+    form_note:"Renting by WhatsApp is normal here. Message us and we handle the rest.",
+    carousel_tag:"Customer Moments", carousel_h2:"Stories from the road",
+    slide1_title:"Padar Island Ride", slide1_sub:"Your next great adventure starts here",
+    slide2_title:"Pink Beach Adventure", slide2_sub:"Discover the hidden gems of Flores",
+    slide3_title:"Komodo Explorer", slide3_sub:"Ride to the land of the ancient dragons",
+    carousel_note:"📸 Upload your adventure photos and we'll feature them here!",
+    faq_tag:"FAQ", faq_h2:"Common questions",
+    faq0_q:"What documents do I need to rent?",
+    faq0_a:"Simply provide your ID card or Passport, a round-trip flight ticket, and your hotel booking confirmation.",
+    faq1_q:"Where do you deliver?",
+    faq1_a:"We deliver across Labuan Bajo town, the airport (LBJ), Katamaran, Marriott, La Prima, Sudamala, Bintang Flores, and Ayana Komodo Resort. Heading somewhere else? Just ask — we'll figure it out. Please note that some locations outside town may incur a small extra delivery fee.",
+    faq2_q:"Is there a security deposit?",
+    faq2_a:"No deposit at all. You pay only the daily rate when we deliver the bike — by cash or bank transfer. No cards, no upfront charges, no surprises.",
+    faq3_q:"What if I get a flat tyre?",
+    faq3_a:"Message us immediately on WhatsApp. We'll guide you to the nearest repair shop (very affordable here) or come out to you if needed. We're locals — we know every mechanic in town.",
+    faq4_q:"Do I need a driving licence?",
+    faq4_a:"We don't require one from you to rent. However, Indonesian law requires a valid licence to ride on public roads. An international driving permit or your home-country licence is generally accepted.",
+    faq5_q:"How do I return the bike?",
+    faq5_a:"Just let us know your return date and where you're staying. We'll pick it up from your hotel or agree on a simple drop-off point nearby. Easy.",
+    footer_desc:"Premium scooter rental in Labuan Bajo. Free delivery. No deposit. Locals who care.",
+    footer_payment:"Verified Local Bank Transfer Accepted via Wise / Revolut",
+    footer_copy:"All rights reserved.", footer_made:"Made with ♥ in Labuan Bajo",
+  },
+
+  id: {
+    nav_wa:"WhatsApp", wa_float:"Hubungi kami",
+    hero_badge:"Labuan Bajo · Est. 2022",
+    hero_h1:"Sewa Skuter Premium di Labuan Bajo",
+    hero_sub1:"Antar gratis ke bandara Komodo, hotel, atau mana saja di kota.",
+    hero_sub2:"Tanpa deposit. Pilih motor, chat WhatsApp, sisanya kami urus.",
+    hero_btn1:"Lihat Armada", hero_btn2:"Pesan via WhatsApp",
+    trust1:"Tanpa deposit", trust2:"Helm termasuk", trust3:"Antar gratis", trust4:"Balas cepat",
+    how_tag:"Cara pesan", how_h2:"Empat langkah, tanpa ribet",
+    how1_title:"Pilih Motor", how1_body:"Lihat armada kami dan pilih yang cocok.",
+    how2_title:"Chat WhatsApp", how2_body:"Beritahu tanggal, nama hotel, dan motor pilihanmu. Kami segera balas.",
+    how3_title:"Verifikasi Identitas", how3_body:"Kirim foto KTP/Paspor, tiket pesawat pulang-pergi, dan konfirmasi pemesanan hotel. Cepat, mudah, dan menjaga keamanan semua pihak.",
+    how4_title:"Langsung Jalan", how4_body:"Kami antar ke pintumu. Bayar saat tiba. Bebas menjelajah.",
+    how_note:"Belum komitmen sampai kamu siap. Chat kami hanya obrolan — tidak ada pembayaran di muka. Bayar tunai atau transfer saat motor diantar. <strong class='text-ink'>Tanpa deposit.</strong>",
+    fleet_tag:"Armada Kami", fleet_h2:"Pilih motormu",
+    fleet_note:"Helm dan pengiriman sudah termasuk. Foto hanya contoh — warna bisa berbeda.",
+    badge_min:"Min 3 Hari", badge_popular:"Paling Populer",
+    beat_desc:"Kompak, irit, mudah parkir — sempurna untuk keliling kota dan jalur pantai.",
+    scoopy_desc:"Gaya retro yang trendi dengan kepraktisan sehari-hari. Cocok untuk pemula.",
+    nmax_desc:"Bagasi bawah jok luas &amp; mesin bertenaga. Motor paling nyaman untuk jelajahi Labuan Bajo. Siap untuk perjalanan.",
+    tag_auto:"Matic", tag_efi:"EFI", tag_keyless:"Keyless", tag_abs:"ABS",
+    per_day:"per hari", book_btn:"Pesan",
+    why_tag:"Kenapa kami", why_h2:"Untuk pelancong sejati",
+    why1_h:"Pemesanan Mudah", why1_b:"Cukup WhatsApp. Tanpa aplikasi, akun, atau formulir.",
+    why2_h:"Motor Terawat", why2_b:"Setiap motor dicek sebelum disewa. Ban, rem, lampu — semua prima.",
+    why3_h:"Tanpa Deposit", why3_b:"Nol uang muka. Bayar hanya biaya harian saat motor diantar.",
+    why4_h:"Antar Gratis", why4_b:"Kami cover bandara, Katamaran, Marriott, La Prima, dan hampir semua area.",
+    why5_h:"Perlengkapan Premium", why5_b:"Helm full-face gratis. Phone mount dan jas hujan tersedia atas permintaan.",
+    why6_h:"Support Jujur", why6_b:"Orang lokal yang hafal setiap jalan. Jika ada masalah, langsung kami tangani.",
+    book_tag:"Pesan Sekarang", book_h2:"Pesan Motor",
+    book_sub:"Isi detail di bawah dan kami akan buka WhatsApp dengan pesan siap kirim.",
+    form_bike:"Motor", form_bike_ph:"Pilih motor",
+    form_pickup:"Tanggal &amp; Waktu Ambil", form_return:"Tanggal &amp; Waktu Kembali",
+    form_area:"Hotel / Area Pengiriman", form_area_ph:"Pilih area / hotel",
+    age_label:"Pengendara berusia antara 30 – 65 tahun",
+    form_submit:"Kirim via WhatsApp",
+    form_note:"Sewa via WhatsApp sudah biasa di sini. Hubungi kami dan sisanya kami urus.",
+    carousel_tag:"Momen Pelanggan", carousel_h2:"Cerita dari perjalanan",
+    slide1_title:"Jelajah Pulau Padar", slide1_sub:"Petualangan besar berikutmu dimulai di sini",
+    slide2_title:"Petualangan Pantai Pink", slide2_sub:"Temukan keajaiban tersembunyi Flores",
+    slide3_title:"Eksplorasi Komodo", slide3_sub:"Berkendara ke negeri komodo purba",
+    carousel_note:"📸 Upload foto petualanganmu dan kami akan tampilkan di sini!",
+    faq_tag:"FAQ", faq_h2:"Pertanyaan umum",
+    faq0_q:"Dokumen apa yang perlu saya siapkan?",
+    faq0_a:"Cukup siapkan KTP atau Paspor, tiket pesawat pulang-pergi, dan konfirmasi pemesanan hotel.",
+    faq1_q:"Di mana saja kalian antar?",
+    faq1_a:"Kami mengcover seluruh kota Labuan Bajo, bandara LBJ, Katamaran, Marriott, La Prima, Sudamala, Bintang Flores, dan Ayana Komodo Resort. Mau tempat lain? Tanya saja. Perlu diketahui bahwa beberapa lokasi di luar kota mungkin dikenakan biaya pengiriman tambahan.",
+    faq2_q:"Apakah ada deposit?",
+    faq2_a:"Tidak ada deposit sama sekali. Kamu hanya bayar biaya sewa harian saat motor diantar — tunai atau transfer. Tanpa kartu, tanpa biaya di muka, tanpa kejutan.",
+    faq3_q:"Bagaimana jika ban bocor?",
+    faq3_a:"Hubungi kami segera via WhatsApp. Kami akan arahkan ke bengkel terdekat atau datangi jika perlu. Kami orang lokal — kenal semua mekanik di kota.",
+    faq4_q:"Apakah perlu SIM?",
+    faq4_a:"Kami tidak mensyaratkan SIM untuk sewa. Namun, hukum Indonesia mengharuskan SIM yang valid di jalan umum. SIM internasional atau SIM negara asalmu umumnya diterima.",
+    faq5_q:"Bagaimana cara mengembalikan motor?",
+    faq5_a:"Cukup beritahu tanggal kembali dan lokasi kamu menginap. Kami jemput di hotel atau sepakati titik pengambilan terdekat. Mudah.",
+    footer_desc:"Sewa skuter premium di Labuan Bajo. Antar gratis. Tanpa deposit. Orang lokal yang peduli.",
+    footer_payment:"Transfer Bank Lokal Terverifikasi Diterima via Wise / Revolut",
+    footer_copy:"Hak cipta dilindungi.", footer_made:"Dibuat dengan ♥ di Labuan Bajo",
+  },
+
+  zh: {
+    nav_wa:"WhatsApp", wa_float:"联系我们",
+    hero_badge:"拉布安巴霍 · 创立于2022",
+    hero_h1:"拉布安巴霍高端踏板车租赁",
+    hero_sub1:"免费配送至机场、酒店或城内任何地点。",
+    hero_sub2:"无需押金。选好车型，WhatsApp联系我们，其余交给我们。",
+    hero_btn1:"查看车队", hero_btn2:"WhatsApp预订",
+    trust1:"无押金", trust2:"含头盔", trust3:"免费配送", trust4:"即刻回复",
+    how_tag:"预订流程", how_h2:"四个步骤，轻松搞定",
+    how1_title:"选择车型", how1_body:"浏览我们的车队，选出最适合您行程的座驾。",
+    how2_title:"WhatsApp联系", how2_body:"告知我们日期、酒店名称和心仪车型，我们很快回复。",
+    how3_title:"验证身份", how3_body:"请发送护照/身份证照片、往返机票和酒店预订确认。快速简单，保障双方安全。",
+    how4_title:"出发骑行", how4_body:"我们送车上门，到达付款，自由探索。",
+    how_note:"随时可取消，无任何承诺。联系我们只是一次对话——无需预付款。送车时付现金或转账。<strong class='text-ink'>无需押金。</strong>",
+    fleet_tag:"我们的车队", fleet_h2:"选择您的座驾",
+    fleet_note:"所有车型均含头盔和配送服务。图片仅供参考，实际颜色可能有所不同。",
+    badge_min:"最少3天", badge_popular:"最受欢迎",
+    beat_desc:"小巧省油，停车方便——探索市区和海岸公路的理想之选。",
+    scoopy_desc:"复古时尚与日常实用的完美结合，非常适合初学者。",
+    nmax_desc:"座椅下大容量储物空间及强劲引擎。探索拉布安巴霍最舒适的座驾，适合前往较远地点的行程。",
+    tag_auto:"自动档", tag_efi:"电喷", tag_keyless:"无钥匙", tag_abs:"ABS",
+    per_day:"每天", book_btn:"预订",
+    why_tag:"为何选择我们", why_h2:"为旅行者而生",
+    why1_h:"无缝预订", why1_b:"仅需WhatsApp，无需应用、账户或表单，一聊即确认。",
+    why2_h:"精心养护", why2_b:"每次出租前全面检查车辆，轮胎、刹车、灯光——均处于最佳状态。",
+    why3_h:"无押金", why3_b:"零预付押金，送车时仅付每日租金——现金或转账均可。",
+    why4_h:"免费城内配送", why4_b:"覆盖机场、Katamaran、万豪、La Prima及拉布安巴霍大多数地点。",
+    why5_h:"优质装备", why5_b:"免费含全脸头盔。手机支架和雨披可按需提供。",
+    why6_h:"诚信服务", why6_b:"熟悉每条道路的本地人。一旦出现问题，我们立即处理。",
+    book_tag:"立即预订", book_h2:"预订踏板车",
+    book_sub:"填写以下信息，我们将打开WhatsApp并为您准备好消息。",
+    form_bike:"车型", form_bike_ph:"选择车型",
+    form_pickup:"取车日期和时间", form_return:"还车日期和时间",
+    form_area:"酒店 / 配送区域", form_area_ph:"选择区域 / 酒店",
+    age_label:"骑手年龄在30至65岁之间",
+    form_submit:"通过WhatsApp发送",
+    form_note:"在这里通过WhatsApp租车很普遍。联系我们，其余交给我们。",
+    carousel_tag:"客户时刻", carousel_h2:"来自路上的故事",
+    slide1_title:"帕达尔岛骑行", slide1_sub:"您的下一场伟大冒险从这里开始",
+    slide2_title:"粉红海滩探险", slide2_sub:"发现弗洛里斯的隐藏宝藏",
+    slide3_title:"科莫多探索者", slide3_sub:"骑行前往古龙之地",
+    carousel_note:"📸 上传您的冒险照片，我们将在这里展示！",
+    faq_tag:"常见问题", faq_h2:"常见问题解答",
+    faq0_q:"租车需要哪些证件？",
+    faq0_a:"只需提供身份证或护照、往返机票和酒店预订确认即可。",
+    faq1_q:"你们配送到哪些地方？",
+    faq1_a:"我们覆盖拉布安巴霍全城、LBJ机场、Katamaran、万豪、La Prima、Sudamala、Bintang Flores和科莫多阿雅纳度假村。想去其他地方？直接问我们。请注意，城外某些地点可能需要额外的小额配送费。",
+    faq2_q:"需要押金吗？",
+    faq2_a:"完全不需要押金。送车时只需支付每日租金——现金或银行转账。无需刷卡，无预付费用，无任何意外收费。",
+    faq3_q:"如果轮胎爆胎怎么办？",
+    faq3_a:"立即通过WhatsApp联系我们。我们会为您指引到最近的修车店或亲自上门协助。我们是本地人——认识城里所有修车师傅。",
+    faq4_q:"需要驾照吗？",
+    faq4_a:"租车时我们不要求提供驾照。但根据印度尼西亚法律，在公共道路上骑行需要有效驾照。国际驾照或您本国驾照通常被接受。",
+    faq5_q:"如何归还车辆？",
+    faq5_a:"只需告知我们还车日期和您的住所，我们上门取车或约定附近的还车地点。非常方便。",
+    footer_desc:"拉布安巴霍高端踏板车租赁。免费配送。无押金。用心服务的本地人。",
+    footer_payment:"接受经认证的本地银行转账，支持 Wise / Revolut",
+    footer_copy:"版权所有。", footer_made:"用♥制作于拉布安巴霍",
+  },
+
+  ja: {
+    nav_wa:"WhatsApp", wa_float:"お問い合わせ",
+    hero_badge:"ラブアンバジョ · 創業2022年",
+    hero_h1:"ラブアンバジョ プレミアムスクーターレンタル",
+    hero_sub1:"空港、ホテル、市内どこでも無料配達。",
+    hero_sub2:"デポジット不要。お好きなバイクを選んでWhatsAppで連絡するだけ。あとはお任せください。",
+    hero_btn1:"車両を見る", hero_btn2:"WhatsAppで予約",
+    trust1:"デポジット不要", trust2:"ヘルメット込み", trust3:"無料配達", trust4:"すぐに返信",
+    how_tag:"予約の流れ", how_h2:"4ステップ、ストレスゼロ",
+    how1_title:"バイクを選ぶ", how1_body:"車両ラインナップをご覧いただき、旅行に最適なバイクをお選びください。",
+    how2_title:"WhatsAppでチャット", how2_body:"日程、ホテル名、希望バイクをお知らせください。すぐに返信いたします。",
+    how3_title:"身分確認", how3_body:"パスポート/IDの写真、往復航空券、ホテル予約確認書をお送りください。迅速・簡単で、皆様の安全を守ります。",
+    how4_title:"出発！", how4_body:"ドアまでお届けします。到着時お支払い。自由に探索してください。",
+    how_note:"準備ができるまでコミットメント不要。連絡はただの会話——前払い不要です。バイクお届け時に現金または振込でお支払いください。<strong class='text-ink'>デポジット不要。</strong>",
+    fleet_tag:"車両ラインナップ", fleet_h2:"あなたのバイクを選ぼう",
+    fleet_note:"全車種ヘルメットと配達込み。写真はイメージです——実際の色が異なる場合があります。",
+    badge_min:"最低3日間", badge_popular:"最も人気",
+    beat_desc:"コンパクトで燃費が良く、駐車しやすい——街中や海岸道路の探索に最適です。",
+    scoopy_desc:"レトロなスタイルと日常の使いやすさを兼ね備えています。初心者にもぴったり。",
+    nmax_desc:"シート下大容量収納＆パワフルエンジン。ラブアンバジョ探索で最も快適なバイク。これにより、より遠くの場所へ移動することも可能になります。",
+    tag_auto:"オートマ", tag_efi:"EFI", tag_keyless:"キーレス", tag_abs:"ABS",
+    per_day:"/ 1日", book_btn:"予約する",
+    why_tag:"選ばれる理由", why_h2:"旅行者のために作られました",
+    why1_h:"スムーズな予約", why1_b:"WhatsAppのみ。アプリ、アカウント、フォーム不要。チャット一つで確定。",
+    why2_h:"整備済み車両", why2_b:"レンタルごとに全車点検。タイヤ、ブレーキ、ライト——すべて最良の状態。",
+    why3_h:"デポジット不要", why3_b:"前払い保証金ゼロ。お届け時に日額料金のみお支払い——現金または振込。",
+    why4_h:"市内無料配達", why4_b:"空港、Katamaran、マリオット、La Prima、ラブアンバジョほぼ全域をカバー。",
+    why5_h:"プレミア装備", why5_b:"フルフェイスヘルメット無料付属。スマホマウントとレインポンチョはご要望に応じて。",
+    why6_h:"誠実なサポート", why6_b:"すべての道を知る地元の人々。問題が発生した場合はすぐに対応します。",
+    book_tag:"今すぐ予約", book_h2:"スクーターを予約",
+    book_sub:"以下の詳細を入力していただければ、WhatsAppにメッセージを準備してご案内します。",
+    form_bike:"バイク", form_bike_ph:"バイクを選択",
+    form_pickup:"ピックアップ日時", form_return:"返却日時",
+    form_area:"ホテル / 配達エリア", form_area_ph:"エリア / ホテルを選択",
+    age_label:"ライダーの年齢は30〜65歳の間です",
+    form_submit:"WhatsAppで送信",
+    form_note:"WhatsAppでレンタルするのはここでは一般的です。ご連絡いただければ、あとはお任せください。",
+    carousel_tag:"お客様の瞬間", carousel_h2:"道からのストーリー",
+    slide1_title:"パダール島ライド", slide1_sub:"次の大冒険はここから始まります",
+    slide2_title:"ピンクビーチアドベンチャー", slide2_sub:"フローレスの隠れた宝を発見",
+    slide3_title:"コモドエクスプローラー", slide3_sub:"古代の龍の地へライド",
+    carousel_note:"📸 冒険の写真をアップロードしてください。こちらに掲載します！",
+    faq_tag:"よくある質問", faq_h2:"よくある質問",
+    faq0_q:"レンタルに必要な書類は何ですか？",
+    faq0_a:"IDカードまたはパスポート、往復航空券、ホテルの予約確認書をご提出ください。",
+    faq1_q:"どこに配達してもらえますか？",
+    faq1_a:"ラブアンバジョ市内全域、LBJ空港、Katamaran、マリオット、La Prima、Sudamala、Bintang Flores、アヤナコモドリゾートに配達いたします。他の場所はご相談ください。市外の一部エリアには少額の配達料が発生する場合があります。",
+    faq2_q:"保証金はありますか？",
+    faq2_a:"保証金は一切不要です。バイクのお届け時に日額料金のみをお支払いください——現金または銀行振込で。カード不要、前払い不要、サプライズなし。",
+    faq3_q:"パンクした場合はどうなりますか？",
+    faq3_a:"すぐにWhatsAppでご連絡ください。近くの修理店（とても手頃な価格です）にご案内するか、必要であれば現地に向かいます。地元民なので、市内の整備士を全員知っています。",
+    faq4_q:"運転免許証は必要ですか？",
+    faq4_a:"レンタルには免許証を要求していません。ただし、インドネシア法により公道での走行には有効な免許証が必要です。国際運転許可証または母国の免許証は一般的に受け入れられます。",
+    faq5_q:"バイクはどのように返却しますか？",
+    faq5_a:"返却日とご宿泊先をお知らせください。ホテルまでお迎えに行くか、近くの返却ポイントを決めます。簡単です。",
+    footer_desc:"ラブアンバジョのプレミアムスクーターレンタル。無料配達。デポジット不要。地元の心あるサービス。",
+    footer_payment:"Wise / Revolut 経由の認証済み国内銀行振込対応",
+    footer_copy:"全著作権所有。", footer_made:"ラブアンバジョで♥を込めて制作",
+  },
+};
+
+let currentLang = 'en';
+
+function applyLang(lang) {
+  const t = i18n[lang];
+  if (!t) return;
+  currentLang = lang;
+
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (t[key] !== undefined) el.innerHTML = t[key];
+  });
+
+  // Update select option[0] placeholders
+  const bikeEl = document.getElementById('f-bike');
+  if (bikeEl && bikeEl.options[0]) bikeEl.options[0].text = t['form_bike_ph'] || '';
+  const areaEl = document.getElementById('f-area');
+  if (areaEl && areaEl.options[0]) areaEl.options[0].text = t['form_area_ph'] || '';
+
+  const labels = { en:'EN', id:'ID', zh:'中文', ja:'日本語' };
+  document.getElementById('lang-current').textContent = labels[lang] || lang.toUpperCase();
+  document.documentElement.lang = lang;
+  try { localStorage.setItem('hb_lang', lang); } catch(e) {}
+}
+
+/* ── Lang dropdown ── */
+const langToggle = document.getElementById('lang-toggle');
+const langMenu   = document.getElementById('lang-menu');
+
+langToggle.addEventListener('click', e => { e.stopPropagation(); langMenu.classList.toggle('hidden'); });
+document.querySelectorAll('.lang-opt').forEach(btn => {
+  btn.addEventListener('click', () => { applyLang(btn.dataset.lang); langMenu.classList.add('hidden'); });
+});
+document.addEventListener('click', () => langMenu.classList.add('hidden'));
+
+(function init() {
+  let saved; try { saved = localStorage.getItem('hb_lang'); } catch(e) {}
+  const bl = (navigator.language||'').slice(0,2).toLowerCase();
+  const map = { id:'id', zh:'zh', ja:'ja', en:'en' };
+  applyLang(saved || map[bl] || 'en');
+})();
+
+/* ── FAQ Accordion ── */
+document.querySelectorAll('.faq-toggle').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item    = btn.closest('.faq-item');
+    const body    = item.querySelector('.faq-body');
+    const chevron = btn.querySelector('.faq-chevron');
+    const isOpen  = body.classList.contains('open');
+    document.querySelectorAll('.faq-body').forEach(b => b.classList.remove('open'));
+    document.querySelectorAll('.faq-chevron').forEach(c => c.classList.remove('open'));
+    if (!isOpen) { body.classList.add('open'); chevron.classList.add('open'); }
+  });
+});
+
+/* ── Book Form → WA ── */
+document.getElementById('form-submit').addEventListener('click', () => {
+  const bike   = document.getElementById('f-bike').value;
+  const pickup = document.getElementById('f-pickup').value;
+  const pTime  = document.getElementById('f-pickup-time').value;
+  const ret    = document.getElementById('f-return').value;
+  const rTime  = document.getElementById('f-return-time').value;
+  const area   = document.getElementById('f-area').value;
+  const ageOk  = document.getElementById('age-confirm').checked;
+
+  let msg = 'Hi hellobajo.go, I\'d like to rent a scooter.';
+  if (bike)   msg += `\nBike: ${bike}`;
+  if (pickup) msg += `\nPickup: ${pickup} at ${pTime}`;
+  if (ret)    msg += `\nReturn: ${ret} at ${rTime}`;
+  if (area)   msg += `\nDelivery to: ${area}`;
+  msg += `\nAge 30–65 confirmed: ${ageOk ? 'Yes' : 'Not confirmed'}`;
+  msg += '\n\nPlease let me know availability. Thank you!';
+  window.open('https://wa.me/6208170788181?text=' + encodeURIComponent(msg), '_blank');
+});
+
+/* ── Carousel ── */
+(function() {
+  const track  = document.getElementById('carousel-track');
+  const slides = document.querySelectorAll('.carousel-slide');
+  const dots   = document.querySelectorAll('.carousel-dot');
+  const total  = slides.length;
+  let cur      = 0;
+  let timer    = null;
+
+  function goTo(idx) {
+    cur = (idx + total) % total;
+    track.style.transform = `translateX(-${cur * 100}%)`;
+    dots.forEach((d, i) => {
+      d.style.background = i === cur ? '#0d9488' : 'rgba(255,255,255,0.55)';
+      d.style.width      = i === cur ? '20px' : '8px';
+    });
+  }
+
+  function start() {
+    timer = setInterval(() => goTo(cur + 1), 4000);
+  }
+
+  function stop() {
+    clearInterval(timer);
+  }
+
+  document.getElementById('carousel-next').addEventListener('click', () => { stop(); goTo(cur+1); start(); });
+  document.getElementById('carousel-prev').addEventListener('click', () => { stop(); goTo(cur-1); start(); });
+  dots.forEach(d => d.addEventListener('click', () => { stop(); goTo(+d.dataset.idx); start(); }));
+
+  // Lazy start via IntersectionObserver
+  const wrapper = document.getElementById('carousel-wrapper');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting && !timer) { goTo(0); start(); }
+      else if (!e.isIntersecting) { stop(); timer = null; }
+    });
+  }, { threshold: 0.3 });
+  io.observe(wrapper);
+})();
+
+/* ── Scroll Reveal ── */
+const ro = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); ro.unobserve(e.target); }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+
+/* ── Navbar shadow on scroll ── */
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('shadow-sm', window.scrollY > 60);
+}, { passive: true });
+</script>
+
+</body>
+</html>
