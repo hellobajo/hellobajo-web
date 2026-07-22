@@ -500,6 +500,41 @@
           </div>
         </div>
 
+        <!-- Return Area -->
+        <div class="mt-4">
+          <label class="block text-xs font-semibold uppercase tracking-wider text-muted mb-2" data-i18n="form_return_area">Return Area / Drop-off</label>
+          <div class="form-select-wrap">
+            <select id="f-return-area" class="form-input pr-10">
+              <option value="" data-i18n-opt="form_return_ph">Select return area / hotel</option>
+              <option value="Same as Delivery">Same as Delivery Area</option>
+              <option value="Komodo Airport (LBJ)">Komodo Airport (LBJ)</option>
+              <option value="Katamaran Hotel & Resort">Katamaran Hotel & Resort</option>
+              <option value="Marriott Labuan Bajo">Marriott Labuan Bajo</option>
+              <option value="La Prima Hotel">La Prima Hotel</option>
+              <option value="Sudamala Resort">Sudamala Resort</option>
+              <option value="Bintang Flores Hotel">Bintang Flores Hotel</option>
+              <option value="Ayana Komodo Resort">Ayana Komodo Resort</option>
+              <option value="Town Centre Hotel">Town Centre Hotel</option>
+              <option value="Other Area (Extra Fee May Apply)">Other Area (Extra Fee May Apply)</option>
+            </select>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+        </div>
+
+        <!-- Verification Details (Email & Socmed) -->
+        <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+          <!-- Email -->
+          <div>
+            <label class="block text-xs font-semibold uppercase tracking-wider text-muted mb-2" data-i18n="form_email">Email Address</label>
+            <input type="email" id="f-email" class="form-input w-full" placeholder="your@email.com">
+          </div>
+          <!-- Social Media -->
+          <div>
+            <label class="block text-xs font-semibold uppercase tracking-wider text-muted mb-2" data-i18n="form_socmed">Instagram / Facebook / Tiktok</label>
+            <input type="text" id="f-socmed" class="form-input w-full" placeholder="@username (For verification)">
+          </div>
+        </div>
+
         <!-- Age confirmation checkbox -->
         <div class="flex items-center gap-3 bg-[#f0fdf9] rounded-xl px-4 py-3 border border-[#99f6e4]">
           <input type="checkbox" id="age-confirm" class="w-4 h-4 rounded cursor-pointer flex-shrink-0" style="accent-color:#0d9488"/>
