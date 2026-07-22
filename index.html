@@ -1168,21 +1168,34 @@ document.querySelectorAll('.faq-toggle').forEach(btn => {
 
 /* ── Book Form → WA ── */
 document.getElementById('form-submit').addEventListener('click', () => {
-  const bike   = document.getElementById('f-bike').value;
-  const pickup = document.getElementById('f-pickup').value;
-  const pTime  = document.getElementById('f-pickup-time').value;
-  const ret    = document.getElementById('f-return').value;
-  const rTime  = document.getElementById('f-return-time').value;
-  const area   = document.getElementById('f-area').value;
-  const ageOk  = document.getElementById('age-confirm').checked;
+  const bike    = document.getElementById('f-bike').value;
+  const pickup  = document.getElementById('f-pickup').value;
+  const pTime   = document.getElementById('f-pickup-time').value;
+  const ret     = document.getElementById('f-return').value;
+  const rTime   = document.getElementById('f-return-time').value;
+  const area    = document.getElementById('f-area').value;
+  const ageOk   = document.getElementById('age-confirm').checked;
+  
+  // Menangkap data dari form baru
+  const retArea = document.getElementById('f-return-area').value;
+  const email   = document.getElementById('f-email').value;
+  const socmed  = document.getElementById('f-socmed').value;
 
   let msg = 'Hi hellobajo.go, I\'d like to rent a scooter.';
-  if (bike)   msg += `\nBike: ${bike}`;
-  if (pickup) msg += `\nPickup: ${pickup} at ${pTime}`;
-  if (ret)    msg += `\nReturn: ${ret} at ${rTime}`;
-  if (area)   msg += `\nDelivery to: ${area}`;
+  
+  if (bike)    msg += `\nBike: ${bike}`;
+  if (pickup)  msg += `\nPickup: ${pickup} at ${pTime}`;
+  if (ret)     msg += `\nReturn: ${ret} at ${rTime}`;
+  if (area)    msg += `\nDelivery to: ${area}`;
+  
+  // Memasukkan data baru ke format pesan WA
+  if (retArea) msg += `\nReturn Area: ${retArea}`;
+  if (email)   msg += `\nEmail: ${email}`;
+  if (socmed)  msg += `\nSocial Media: ${socmed}`;
+  
   msg += `\nAge 30–65 confirmed: ${ageOk ? 'Yes' : 'Not confirmed'}`;
   msg += '\n\nPlease let me know availability. Thank you!';
+  
   window.open('https://wa.me/6208170788181?text=' + encodeURIComponent(msg), '_blank');
 });
 
